@@ -10,19 +10,14 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -33,24 +28,35 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.amasesoft.tabatatimer.domain.formatSeconds
 import com.amasesoft.tabatatimer.theme.AppTheme
 import com.amasesoft.tabatatimer.theme.TabularNumbers
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -63,7 +69,6 @@ import tabatatimer.shared.generated.resources.a11y_edit_value
 import tabatatimer.shared.generated.resources.a11y_increase
 import tabatatimer.shared.generated.resources.ic_add
 import tabatatimer.shared.generated.resources.ic_remove
-import kotlin.math.roundToInt
 
 /**
  * Stepper for a duration in seconds, shown as `m:ss`.
@@ -192,7 +197,7 @@ private fun ValueStepper(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Column(modifier = Modifier.weight(1f).clearAndSetSemantics { }) {
-            Text(
+            WholeWordsText(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 color = if (enabled) {
@@ -201,7 +206,6 @@ private fun ValueStepper(
                     MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                 },
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
             )
             if (supportingText != null) {
                 Text(
@@ -284,6 +288,42 @@ private fun ValueStepper(
                 onValueChange(confirmed)
             },
             onDismiss = { showEntryDialog = false },
+        )
+    }
+}
+
+/**
+ * Text that never breaks a word in the middle: if a line ends inside a word (narrow phones,
+ * large font scale) the font is shrunk step by step, without drawing, until it no longer does.
+ */
+@Composable
+private fun WholeWordsText(
+    text: String,
+    style: TextStyle,
+    color: Color,
+    maxLines: Int,
+    minFontSize: TextUnit = 12.sp,
+) {
+    BoxWithConstraints {
+        var fontSize by remember(text, style, constraints.maxWidth) { mutableStateOf(style.fontSize) }
+        var fitted by remember(text, style, constraints.maxWidth) { mutableStateOf(false) }
+        Text(
+            text = text,
+            style = style.copy(fontSize = fontSize),
+            color = color,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.drawWithContent { if (fitted) drawContent() },
+            onTextLayout = { layout ->
+                if (!fitted) {
+                    val splitsWord = (0 until layout.lineCount - 1).any { line ->
+                        val end = layout.getLineEnd(line)
+                        end in 1 until text.length && text[end - 1].isLetterOrDigit() && text[end].isLetterOrDigit()
+                    }
+                    val smaller = fontSize * 0.92f
+                    if (splitsWord && smaller >= minFontSize) fontSize = smaller else fitted = true
+                }
+            },
         )
     }
 }
