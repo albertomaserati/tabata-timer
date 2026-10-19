@@ -1,0 +1,156 @@
+<resources>
+    <string name="app_name">Tabata Timer</string>
+    <string name="quick_workout">Quick workout</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_done">Done</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_reorder">Reorder</string>
+    <string name="action_restart">Restart</string>
+    <string name="action_resume">Resume</string>
+    <string name="action_save">Save</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_start">Start</string>
+    <string name="action_stop">Stop</string>
+
+    <!-- Accessibility -->
+    <string name="a11y_decrease">Decrease %1$s</string>
+    <string name="a11y_increase">Increase %1$s</string>
+
+    <!-- Home -->
+    <string name="home_quick_subtitle">Set it up and start right away, no need to save</string>
+    <string name="home_saved_section">Saved workouts (%1$d/%2$d)</string>
+    <string name="home_new_workout">New workout</string>
+    <string name="home_empty_title">No saved workouts yet</string>
+    <string name="home_empty_message">Create a workout to find it here, ready to start with one tap.</string>
+    <string name="home_summary">%1$s · %2$s × %3$s</string>
+    <plurals name="home_uses">
+        <item quantity="one">%1$d use</item>
+        <item quantity="other">%1$d uses</item>
+    </plurals>
+    <string name="home_advanced_badge">Advanced</string>
+    <string name="home_delete_title">Delete workout?</string>
+    <string name="home_delete_message">“%1$s” will be permanently deleted.</string>
+    <string name="limit_reached">You can save up to %1$d workouts. Delete one to save a new one.</string>
+
+    <!-- Sorting -->
+    <string name="sort_custom">Custom order</string>
+    <string name="sort_name">Name (A–Z)</string>
+    <string name="sort_most_used">Most used</string>
+    <string name="sort_newest">Newest first</string>
+    <string name="sort_oldest">Oldest first</string>
+    <string name="sort_shortest">Shortest first</string>
+    <string name="sort_longest">Longest first</string>
+
+    <!-- Editor -->
+    <string name="editor_title_quick">Quick workout</string>
+    <string name="editor_title_new">New workout</string>
+    <string name="editor_title_edit">Edit workout</string>
+    <string name="editor_name">Name</string>
+    <string name="editor_name_required">Enter a name</string>
+    <string name="editor_description">Description (optional)</string>
+    <string name="editor_simple">Simple</string>
+    <string name="editor_advanced">Advanced</string>
+    <string name="editor_simple_hint">All cycles are the same. Switch to Advanced to customize each cycle.</string>
+    <string name="editor_advanced_hint">Each cycle has its own name, work and rest time.</string>
+    <string name="editor_general_section">General</string>
+    <string name="editor_cycles_section">Cycles</string>
+    <string name="editor_prepare">Prepare</string>
+    <string name="editor_sets">Sets</string>
+    <string name="editor_rest_between_sets">Rest between sets</string>
+    <string name="editor_rest_between_sets_hint">Not after the last set</string>
+    <string name="editor_rest_between_sets_single">Only used with 2 or more sets</string>
+    <string name="editor_work">Work</string>
+    <string name="editor_rest">Rest</string>
+    <string name="editor_rest_hint">Not after the last cycle of each set</string>
+    <string name="editor_cycles">Cycles</string>
+    <string name="editor_cycle_name">Cycle name</string>
+    <string name="editor_cycle_default_name">Cycle %1$d</string>
+    <string name="editor_last_cycle_hint">Last cycle of the set: work only</string>
+    <string name="editor_total_duration">Total duration</string>
+    <string name="editor_simplify_title">Switch to simple mode?</string>
+    <string name="editor_simplify_message">Your cycles are not all the same. Names and custom times will be lost: every cycle will use the times of the first one.</string>
+    <string name="editor_simplify_confirm">Switch</string>
+    <string name="editor_save_dialog_title">Save workout</string>
+    <string name="editor_saved">Workout saved</string>
+
+    <!-- Run -->
+    <string name="phase_prepare">Get ready</string>
+    <string name="phase_work">Work</string>
+    <string name="phase_rest">Rest</string>
+    <string name="phase_set_rest">Rest between sets</string>
+    <string name="run_set_indicator">Set %1$d/%2$d</string>
+    <string name="run_cycle_indicator">Cycle %1$d/%2$d</string>
+    <string name="run_next">Next: %1$s · %2$s</string>
+    <string name="run_last_activity">Last activity!</string>
+    <string name="run_total_remaining">Total remaining</string>
+    <string name="run_paused">Paused</string>
+    <string name="run_finished_title">Well done!</string>
+    <string name="run_finished_subtitle">Workout completed</string>
+    <string name="run_stop_title">Stop workout?</string>
+    <string name="run_stop_message">Your progress in this workout will be lost.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_workout">Workout</string>
+    <string name="settings_sound">Sound cues</string>
+    <string name="settings_sound_hint">Beep in the last 3 seconds and at each new activity</string>
+    <string name="language_system">System default</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_english">English</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <!-- Item-specific accessibility labels -->
+    <string name="a11y_move_up">Move %1$s up</string>
+    <string name="a11y_move_down">Move %1$s down</string>
+    <string name="a11y_duplicate">Duplicate %1$s</string>
+    <string name="a11y_delete">Delete %1$s</string>
+    <string name="a11y_start">Start %1$s</string>
+    <string name="a11y_more">More options for %1$s</string>
+
+    <string name="action_move_top">Move to top</string>
+    <string name="action_move_bottom">Move to bottom</string>
+    <string name="storage_error">Couldn’t access the saved data. Please try again.</string>
+
+    <plurals name="home_sets">
+        <item quantity="one">%1$d set</item>
+        <item quantity="other">%1$d sets</item>
+    </plurals>
+    <plurals name="home_cycles">
+        <item quantity="one">%1$d cycle</item>
+        <item quantity="other">%1$d cycles</item>
+    </plurals>
+
+    <string name="editor_discard_title">Discard changes?</string>
+    <string name="editor_discard_message">Your unsaved changes will be lost.</string>
+    <string name="editor_discard_confirm">Discard</string>
+
+    <!-- Value entry dialog -->
+    <string name="a11y_edit_value">Edit %1$s</string>
+    <string name="a11y_backspace">Delete last digit</string>
+    <string name="action_ok">OK</string>
+    <string name="entry_range">Between %1$s and %2$s</string>
+
+    <!-- Advanced cycles -->
+    <string name="editor_add_cycle_n">Add cycle %1$d</string>
+    <string name="editor_add_cycle_hint">Copies the times of the last cycle</string>
+    <string name="editor_max_cycles">Maximum %1$d cycles</string>
+    <plurals name="editor_cycle_count">
+        <item quantity="one">%1$d cycle</item>
+        <item quantity="other">%1$d cycles</item>
+    </plurals>
+    <string name="entry_out_of_range">Out of range: between %1$s and %2$s</string>
+    <string name="editor_name_taken">A workout with this name already exists</string>
+    <string name="home_load_error">Couldn’t read your workouts</string>
+    <string name="action_retry">Retry</string>
+</resources>

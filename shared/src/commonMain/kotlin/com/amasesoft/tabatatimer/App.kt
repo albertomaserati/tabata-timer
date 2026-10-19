@@ -1,68 +1,52 @@
 package com.amasesoft.tabatatimer
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalOf
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
+import com.amasesoft.tabatatimer.data.ThemeMode
+import com.amasesoft.tabatatimer.di.AppContainer
+import com.amasesoft.tabatatimer.platform.LocalAppLocale
+import com.amasesoft.tabatatimer.platform.SystemBarsAppearance
 import com.amasesoft.tabatatimer.theme.AppTheme
+import com.amasesoft.tabatatimer.ui.navigation.AppNavHost
 
-import tabatatimer.shared.generated.resources.Res
-import tabatatimer.shared.generated.resources.compose_multiplatform
-
+/** Root composable rendered by both platforms. */
 @Composable
-@Preview
-fun App() {
-    AppTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                //.safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-                ) {
-                Text(
-                    text = "Tabata timer",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSecondary)
-            }
+fun App(container: AppContainer) {
+    val settings by container.settings.collectAsStateWithLifecycle()
+    // Settings are read once per process (a few ms): render nothing until then, to avoid a
+    // flash of the wrong theme or language.
+    val current = settings ?: return
 
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+    // Hoisted above key(): the back stack survives a language change.
+    val navController = rememberNavController()
+
+    val darkTheme = when (current.theme) {
+        ThemeMode.System -> isSystemInDarkTheme()
+        ThemeMode.Light -> false
+        ThemeMode.Dark -> true
+    }
+
+    SystemBarsAppearance(darkTheme)
+
+    CompositionLocalProvider(LocalAppLocale provides current.language.tag) {
+        // Compose resources cache the resolved locale: re-create the UI when it changes.
+        key(current.language) {
+            AppTheme(darkTheme = darkTheme) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    AppNavHost(
+                        navController = navController,
+                        container = container,
+                        soundEnabled = current.soundEnabled,
+                    )
                 }
             }
         }

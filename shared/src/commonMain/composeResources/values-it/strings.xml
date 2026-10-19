@@ -1,0 +1,156 @@
+<resources>
+    <string name="app_name">Tabata Timer</string>
+    <string name="quick_workout">Allenamento rapido</string>
+
+    <!-- Azioni comuni -->
+    <string name="action_back">Indietro</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="action_close">Chiudi</string>
+    <string name="action_delete">Elimina</string>
+    <string name="action_done">Fatto</string>
+    <string name="action_edit">Modifica</string>
+    <string name="action_pause">Pausa</string>
+    <string name="action_reorder">Riordina</string>
+    <string name="action_restart">Ricomincia</string>
+    <string name="action_resume">Riprendi</string>
+    <string name="action_save">Salva</string>
+    <string name="action_skip">Salta</string>
+    <string name="action_sort">Ordina</string>
+    <string name="action_start">Avvia</string>
+    <string name="action_stop">Interrompi</string>
+
+    <!-- Accessibilità -->
+    <string name="a11y_decrease">Diminuisci %1$s</string>
+    <string name="a11y_increase">Aumenta %1$s</string>
+
+    <!-- Home -->
+    <string name="home_quick_subtitle">Configura e parti subito, senza salvare</string>
+    <string name="home_saved_section">Allenamenti salvati (%1$d/%2$d)</string>
+    <string name="home_new_workout">Nuovo allenamento</string>
+    <string name="home_empty_title">Nessun allenamento salvato</string>
+    <string name="home_empty_message">Crea un allenamento per ritrovarlo qui, pronto da avviare con un tocco.</string>
+    <string name="home_summary">%1$s · %2$s × %3$s</string>
+    <plurals name="home_uses">
+        <item quantity="one">%1$d utilizzo</item>
+        <item quantity="other">%1$d utilizzi</item>
+    </plurals>
+    <string name="home_advanced_badge">Avanzato</string>
+    <string name="home_delete_title">Eliminare l’allenamento?</string>
+    <string name="home_delete_message">“%1$s” verrà eliminato definitivamente.</string>
+    <string name="limit_reached">Puoi salvare al massimo %1$d allenamenti. Eliminane uno per salvarne uno nuovo.</string>
+
+    <!-- Ordinamento -->
+    <string name="sort_custom">Ordine personalizzato</string>
+    <string name="sort_name">Nome (A–Z)</string>
+    <string name="sort_most_used">Più usati</string>
+    <string name="sort_newest">Più recenti</string>
+    <string name="sort_oldest">Meno recenti</string>
+    <string name="sort_shortest">Più brevi</string>
+    <string name="sort_longest">Più lunghi</string>
+
+    <!-- Editor -->
+    <string name="editor_title_quick">Allenamento rapido</string>
+    <string name="editor_title_new">Nuovo allenamento</string>
+    <string name="editor_title_edit">Modifica allenamento</string>
+    <string name="editor_name">Nome</string>
+    <string name="editor_name_required">Inserisci un nome</string>
+    <string name="editor_description">Descrizione (facoltativa)</string>
+    <string name="editor_simple">Semplice</string>
+    <string name="editor_advanced">Avanzata</string>
+    <string name="editor_simple_hint">Tutti i cicli sono uguali. Passa ad Avanzata per personalizzare ogni ciclo.</string>
+    <string name="editor_advanced_hint">Ogni ciclo ha un nome e tempi di lavoro e riposo propri.</string>
+    <string name="editor_general_section">Generale</string>
+    <string name="editor_cycles_section">Cicli</string>
+    <string name="editor_prepare">Preparazione</string>
+    <string name="editor_sets">Set</string>
+    <string name="editor_rest_between_sets">Riposo tra i set</string>
+    <string name="editor_rest_between_sets_hint">Non dopo l’ultimo set</string>
+    <string name="editor_rest_between_sets_single">Usato solo con 2 o più set</string>
+    <string name="editor_work">Lavoro</string>
+    <string name="editor_rest">Riposo</string>
+    <string name="editor_rest_hint">Non dopo l’ultimo ciclo di ogni set</string>
+    <string name="editor_cycles">Cicli</string>
+    <string name="editor_cycle_name">Nome del ciclo</string>
+    <string name="editor_cycle_default_name">Ciclo %1$d</string>
+    <string name="editor_last_cycle_hint">Ultimo ciclo del set: solo lavoro</string>
+    <string name="editor_total_duration">Durata totale</string>
+    <string name="editor_simplify_title">Passare alla modalità semplice?</string>
+    <string name="editor_simplify_message">I cicli non sono tutti uguali. Nomi e tempi personalizzati andranno persi: ogni ciclo userà i tempi del primo.</string>
+    <string name="editor_simplify_confirm">Passa</string>
+    <string name="editor_save_dialog_title">Salva allenamento</string>
+    <string name="editor_saved">Allenamento salvato</string>
+
+    <!-- Esecuzione -->
+    <string name="phase_prepare">Preparati</string>
+    <string name="phase_work">Lavoro</string>
+    <string name="phase_rest">Riposo</string>
+    <string name="phase_set_rest">Riposo tra i set</string>
+    <string name="run_set_indicator">Set %1$d/%2$d</string>
+    <string name="run_cycle_indicator">Ciclo %1$d/%2$d</string>
+    <string name="run_next">Prossimo: %1$s · %2$s</string>
+    <string name="run_last_activity">Ultima attività!</string>
+    <string name="run_total_remaining">Tempo totale rimanente</string>
+    <string name="run_paused">In pausa</string>
+    <string name="run_finished_title">Ottimo lavoro!</string>
+    <string name="run_finished_subtitle">Allenamento completato</string>
+    <string name="run_stop_title">Interrompere l’allenamento?</string>
+    <string name="run_stop_message">I progressi di questo allenamento andranno persi.</string>
+
+    <!-- Impostazioni -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_language">Lingua</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_workout">Allenamento</string>
+    <string name="settings_sound">Segnali sonori</string>
+    <string name="settings_sound_hint">Bip negli ultimi 3 secondi e a ogni nuova attività</string>
+    <string name="language_system">Predefinita di sistema</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_english">English</string>
+    <string name="theme_system">Predefinito di sistema</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+
+    <!-- Etichette di accessibilità specifiche per elemento -->
+    <string name="a11y_move_up">Sposta su %1$s</string>
+    <string name="a11y_move_down">Sposta giù %1$s</string>
+    <string name="a11y_duplicate">Duplica %1$s</string>
+    <string name="a11y_delete">Elimina %1$s</string>
+    <string name="a11y_start">Avvia %1$s</string>
+    <string name="a11y_more">Altre opzioni per %1$s</string>
+
+    <string name="action_move_top">Sposta in cima</string>
+    <string name="action_move_bottom">Sposta in fondo</string>
+    <string name="storage_error">Impossibile accedere ai dati salvati. Riprova.</string>
+
+    <plurals name="home_sets">
+        <item quantity="one">%1$d set</item>
+        <item quantity="other">%1$d set</item>
+    </plurals>
+    <plurals name="home_cycles">
+        <item quantity="one">%1$d ciclo</item>
+        <item quantity="other">%1$d cicli</item>
+    </plurals>
+
+    <string name="editor_discard_title">Annullare le modifiche?</string>
+    <string name="editor_discard_message">Le modifiche non salvate andranno perse.</string>
+    <string name="editor_discard_confirm">Annulla modifiche</string>
+
+    <!-- Dialog di inserimento valori -->
+    <string name="a11y_edit_value">Modifica %1$s</string>
+    <string name="a11y_backspace">Cancella l’ultima cifra</string>
+    <string name="action_ok">OK</string>
+    <string name="entry_range">Tra %1$s e %2$s</string>
+
+    <!-- Cicli avanzati -->
+    <string name="editor_add_cycle_n">Aggiungi ciclo %1$d</string>
+    <string name="editor_add_cycle_hint">Copia i tempi dell’ultimo ciclo</string>
+    <string name="editor_max_cycles">Massimo %1$d cicli</string>
+    <plurals name="editor_cycle_count">
+        <item quantity="one">%1$d ciclo</item>
+        <item quantity="other">%1$d cicli</item>
+    </plurals>
+    <string name="entry_out_of_range">Fuori intervallo: tra %1$s e %2$s</string>
+    <string name="editor_name_taken">Esiste già un workout con questo nome</string>
+    <string name="home_load_error">Impossibile leggere i workout</string>
+    <string name="action_retry">Riprova</string>
+</resources>
