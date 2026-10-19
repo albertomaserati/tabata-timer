@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Stopwatch with lightning bolt (source: design/icon/app-icon.svg). Kept inside the 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M51,24h6a3,3 0,0 1,3 3v1a3,3 0,0 1,-3 3h-6a3,3 0,0 1,-3 -3v-1a3,3 0,0 1,3 -3zM51.5,29h5v7h-5zM30,59a24,24 0,1 0,48 0a24,24 0,1 0,-48 0z" />
+    <path
+        android:pathData="M72.5,40.5L76.5,36.5"
+        android:strokeWidth="5"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+    <path
+        android:fillColor="@color/brand_coral"
+        android:pathData="M58,42L45,62L53,62L50,76L64,55L56,55L60,42Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="@color/brand_coral"
+        android:strokeLineJoin="round" />
+</vector>

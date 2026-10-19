@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window theme: follows the system night mode to avoid a white flash before Compose draws. -->
+    <style name="Theme.TabataTimer" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <!-- Launch theme: brand-green splash with the app icon, then switches to Theme.TabataTimer. -->
+    <style name="Theme.TabataTimer.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.TabataTimer</item>
+    </style>
+</resources>
