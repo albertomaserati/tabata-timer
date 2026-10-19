@@ -53,3 +53,9 @@ android {
         compose = true
     }
 }
+
+// Output file names: tabataTimer-<versionName>-debug.apk, tabataTimer-<versionName>-release.apk, ...
+// Declared after `android {}` so that versionName is already set.
+base {
+    archivesName = "tabataTimer-${android.defaultConfig.versionName}"
+}
