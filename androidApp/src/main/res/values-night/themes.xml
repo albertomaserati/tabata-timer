@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.TabataTimer" parent="@android:style/Theme.Material.NoActionBar">
-        <item name="android:windowBackground">@android:color/background_dark</item>
+        <item name="android:windowBackground">#FF0E1B2C</item>
     </style>
 </resources>

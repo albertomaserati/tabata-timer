@@ -11,31 +11,61 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.amasesoft.tabatatimer.domain.PhaseType
 
+// Colors aligned with the AM logo: teal primary, navy secondary, green tertiary.
 private val LightColorScheme = lightColorScheme(
-    primary = Green40,
-    secondary = GreenGrey40,
-    tertiary = Tiffany40,
-    background = Color.White,
-    onBackground = Color.DarkGray,
-    primaryContainer = GreenGrey40,
-    onPrimaryContainer = Color.White,
-    secondaryContainer = GreenGrey90,
-    onSecondaryContainer = GreenGrey10,
-    onPrimary = Color.White
+    primary = LogoTeal,
+    onPrimary = Color.White,
+    primaryContainer = Teal90,
+    onPrimaryContainer = Teal10,
+    secondary = LogoNavy,
+    onSecondary = Color.White,
+    secondaryContainer = Navy90,
+    onSecondaryContainer = Navy10,
+    tertiary = LogoGreen,
+    onTertiary = Color.White,
+    tertiaryContainer = Green90,
+    onTertiaryContainer = Green10,
+    background = LightBackground,
+    onBackground = LightOnBackground,
+    surface = LightBackground,
+    onSurface = LightOnBackground,
+    surfaceVariant = LightSurfaceContainerHighest,
+    onSurfaceVariant = LightOnSurfaceVariant,
+    surfaceContainerLowest = LightSurfaceContainerLowest,
+    surfaceContainerLow = LightSurfaceContainerLow,
+    surfaceContainer = LightSurfaceContainer,
+    surfaceContainerHigh = LightSurfaceContainerHigh,
+    surfaceContainerHighest = LightSurfaceContainerHighest,
+    outline = LightOutline,
+    outlineVariant = LightOutlineVariant,
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Green80,
-    secondary = GreenGrey80,
-    tertiary = Tiffany80,
-    background = Color.DarkGray,
-    onBackground = Color.White,
-    primaryContainer = GreenGrey80,
-    onPrimaryContainer = DarkGreen20,
-    secondaryContainer = GreenGrey30,
-    onSecondaryContainer = GreenGrey90,
-    // Dark text on the light green primary for readable contrast.
-    onPrimary = DarkGreen20
+    primary = Teal80,
+    onPrimary = Teal20,
+    primaryContainer = LogoTeal,
+    onPrimaryContainer = Teal90,
+    secondary = Navy80,
+    onSecondary = Navy20,
+    secondaryContainer = Navy30,
+    onSecondaryContainer = Navy90,
+    tertiary = Green80,
+    onTertiary = Green10,
+    tertiaryContainer = Green30,
+    onTertiaryContainer = Green90,
+    background = DarkBackground,
+    onBackground = DarkOnBackground,
+    surface = DarkBackground,
+    onSurface = DarkOnBackground,
+    surfaceVariant = DarkSurfaceContainerHighest,
+    onSurfaceVariant = DarkOnSurfaceVariant,
+    surfaceContainerLowest = DarkSurfaceContainerLowest,
+    surfaceContainerLow = DarkSurfaceContainerLow,
+    surfaceContainer = DarkSurfaceContainer,
+    surfaceContainerHigh = DarkSurfaceContainerHigh,
+    surfaceContainerHighest = DarkSurfaceContainerHighest,
+    outline = DarkOutline,
+    outlineVariant = DarkOutlineVariant,
 )
 
 /** Accent color for each workout phase. */
@@ -54,8 +84,8 @@ data class PhaseColors(
     }
 }
 
-private val LightPhaseColors = PhaseColors(prepare = Amber40, work = Coral40, rest = Green40, setRest = Blue40)
-private val DarkPhaseColors = PhaseColors(prepare = Amber80, work = Coral80, rest = Green80, setRest = Blue80)
+private val LightPhaseColors = PhaseColors(prepare = Amber40, work = Coral40, rest = LogoGreen, setRest = Navy40)
+private val DarkPhaseColors = PhaseColors(prepare = Amber80, work = Coral80, rest = Green80, setRest = Navy80)
 
 val LocalPhaseColors = staticCompositionLocalOf { LightPhaseColors }
 
