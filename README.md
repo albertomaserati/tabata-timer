@@ -11,7 +11,7 @@ The whole UI and logic are written once in the [`shared`](./shared/src) module; 
   Switching to advanced copies the simple values into each cycle; switching back asks for confirmation if the cycles differ.
 - **Fast value entry**: every time/count can be changed with +/- (hold to accelerate) or by tapping the value,
   which opens a numeric keypad with timer-style entry (digits fill `m:ss` from the right) and quick presets.
-- **Saved workouts**: up to 20, each with a unique name and an optional description.
+- **Saved workouts**: up to 50, each with a unique name and an optional description.
 - **Home list** sortable by custom order (reorder mode, move to top/bottom), name, most used, newest/oldest, shortest/longest.
   The chosen sort is remembered.
 - **Run screen**: progress ring with phase colors, remaining seconds of the current activity, its name, next activity,

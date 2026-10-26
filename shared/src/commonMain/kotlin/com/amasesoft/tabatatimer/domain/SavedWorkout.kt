@@ -2,7 +2,7 @@ package com.amasesoft.tabatatimer.domain
 
 import kotlinx.serialization.Serializable
 
-const val MAX_SAVED_WORKOUTS = 20
+const val MAX_SAVED_WORKOUTS = 50
 
 @Serializable
 data class SavedWorkout(
