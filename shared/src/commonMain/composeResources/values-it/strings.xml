@@ -103,6 +103,10 @@
     <string name="settings_workout">Allenamento</string>
     <string name="settings_sound">Segnali sonori</string>
     <string name="settings_sound_hint">Bip negli ultimi 3 secondi e a ogni nuova attività</string>
+    <string name="settings_about">Informazioni</string>
+    <string name="about_version">Versione %1$s (%2$s)</string>
+    <string name="about_developed_by">Sviluppata da Alberto Maserati</string>
+    <string name="about_open_website">Apri il sito</string>
     <string name="language_system">Predefinita di sistema</string>
     <string name="language_italian">Italiano</string>
     <string name="language_english">English</string>

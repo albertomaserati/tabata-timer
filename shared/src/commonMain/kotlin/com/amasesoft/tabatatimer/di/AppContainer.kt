@@ -21,8 +21,9 @@ import kotlinx.coroutines.flow.stateIn
  * `MainViewController` on iOS) because each DataStore file allows one active instance.
  *
  * @param storageDirectory absolute path of a private, writable directory.
+ * @param appVersion version of the installed app, read from the platform (shown in Settings > About).
  */
-class AppContainer(storageDirectory: String) {
+class AppContainer(storageDirectory: String, val appVersion: AppVersion) {
 
     val workoutRepository: WorkoutRepository = DataStoreWorkoutRepository(
         createJsonDataStore(storageDirectory, "workouts.json", WorkoutStore.serializer(), WorkoutStore()),
@@ -43,3 +44,6 @@ class AppContainer(storageDirectory: String) {
     val settings: StateFlow<AppSettings?> =
         settingsRepository.settings.stateIn(appScope, SharingStarted.Eagerly, null)
 }
+
+/** User-visible version (`versionName` / `CFBundleShortVersionString`) and build number. */
+data class AppVersion(val name: String, val build: String)

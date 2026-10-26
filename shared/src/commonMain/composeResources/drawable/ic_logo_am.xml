@@ -1,0 +1,16 @@
+<!-- AM logo (Alberto Maserati), converted from logo-AM.svg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="28.35dp"
+    android:viewportWidth="888.89"
+    android:viewportHeight="787.38">
+    <path
+        android:fillColor="#FF3D9970"
+        android:pathData="M444.50,-0.00L318.34,223.51L324.86,234.80L324.94,234.93L325.04,235.12L444.45,446.66L563.88,235.07L570.50,223.34Z" />
+    <path
+        android:fillColor="#FF17365D"
+        android:pathData="M630.14,775.64L636.77,787.38L888.89,787.38L742.95,528.83L597.01,270.29L470.95,493.62L477.58,505.36Z" />
+    <path
+        android:fillColor="#FF2A6867"
+        android:pathData="M291.88,270.29L-0.00,787.38L291.88,787.38L583.76,787.38L437.82,528.83Z" />
+</vector>

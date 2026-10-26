@@ -128,7 +128,7 @@ fun AppNavHost(
 
         composable<SettingsRoute> { entry ->
             val viewModel = viewModel { SettingsViewModel(container.settingsRepository) }
-            SettingsScreen(viewModel = viewModel, onBack = { entry.back() })
+            SettingsScreen(viewModel = viewModel, appVersion = container.appVersion, onBack = { entry.back() })
         }
     }
 }

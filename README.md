@@ -32,7 +32,7 @@ The whole UI and logic are written once in the [`shared`](./shared/src) module; 
 ## Build and run
 
 - Android debug APK: `./gradlew :androidApp:assembleDebug`
-  → `androidApp/build/outputs/apk/debug/tabataTimer-<versionName>-debug.apk` (e.g. `tabataTimer-1.0-debug.apk`)
+  → `androidApp/build/outputs/apk/debug/tabataTimer-<versionName>-debug.apk` (e.g. `tabataTimer-1.1-debug.apk`)
 - Install on a connected device/emulator: `./gradlew :androidApp:installDebug`
 - iOS app: open [`iosApp`](./iosApp) in Xcode and run it; the Xcode build invokes Gradle to produce the `Shared` framework.
 - iOS compile check without Xcode: `./gradlew :shared:compileKotlinIosSimulatorArm64`
