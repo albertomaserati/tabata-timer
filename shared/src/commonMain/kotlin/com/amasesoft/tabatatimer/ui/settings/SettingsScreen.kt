@@ -80,6 +80,8 @@ import tabatatimer.shared.generated.resources.settings_about
 import tabatatimer.shared.generated.resources.settings_language
 import tabatatimer.shared.generated.resources.settings_sound
 import tabatatimer.shared.generated.resources.settings_sound_hint
+import tabatatimer.shared.generated.resources.settings_ten_seconds
+import tabatatimer.shared.generated.resources.settings_ten_seconds_hint
 import tabatatimer.shared.generated.resources.settings_theme
 import tabatatimer.shared.generated.resources.settings_title
 import tabatatimer.shared.generated.resources.settings_workout
@@ -97,6 +99,7 @@ class SettingsViewModel(private val settingsRepository: SettingsRepository) : Vi
     fun setLanguage(language: AppLanguage) = update { it.copy(language = language) }
     fun setTheme(theme: ThemeMode) = update { it.copy(theme = theme) }
     fun setSoundEnabled(enabled: Boolean) = update { it.copy(soundEnabled = enabled) }
+    fun setTenSecondWarning(enabled: Boolean) = update { it.copy(tenSecondWarning = enabled) }
 
     private val _errors = Channel<Unit>(Channel.CONFLATED)
 
@@ -161,32 +164,45 @@ fun SettingsScreen(viewModel: SettingsViewModel, appVersion: AppVersion, onBack:
                 onSelect = viewModel::setTheme,
             )
             SettingsCard(title = stringResource(Res.string.settings_workout)) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 56.dp)
-                        .toggleable(
-                            value = current.soundEnabled,
-                            role = Role.Switch,
-                            onValueChange = viewModel::setSoundEnabled,
-                        )
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(stringResource(Res.string.settings_sound), style = MaterialTheme.typography.bodyLarge)
-                        Text(
-                            stringResource(Res.string.settings_sound_hint),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                    Spacer(Modifier.width(16.dp))
-                    Switch(checked = current.soundEnabled, onCheckedChange = null)
-                }
+                SwitchRow(
+                    title = stringResource(Res.string.settings_sound),
+                    hint = stringResource(Res.string.settings_sound_hint),
+                    checked = current.soundEnabled,
+                    onCheckedChange = viewModel::setSoundEnabled,
+                )
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                SwitchRow(
+                    title = stringResource(Res.string.settings_ten_seconds),
+                    hint = stringResource(Res.string.settings_ten_seconds_hint),
+                    checked = current.tenSecondWarning,
+                    onCheckedChange = viewModel::setTenSecondWarning,
+                )
             }
             AboutSection(appVersion)
         }
+    }
+}
+
+@Composable
+private fun SwitchRow(title: String, hint: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                hint,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.width(16.dp))
+        Switch(checked = checked, onCheckedChange = null)
     }
 }
 

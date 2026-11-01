@@ -11,9 +11,11 @@ import platform.AudioToolbox.AudioServicesPlaySystemSound
 private object SystemSoundCuePlayer : CuePlayer {
     private const val TICK: UInt = 1057u      // "Tink"
     private const val PHASE: UInt = 1052u     // SIM toolkit general beep
+    private const val TEN_LEFT: UInt = 1106u  // "beep-beep" double beep
     private const val FINISHED: UInt = 1025u  // "Fanfare"-like new mail chime
 
     override fun countdown() = AudioServicesPlaySystemSound(TICK)
+    override fun tenSecondsLeft() = AudioServicesPlaySystemSound(TEN_LEFT)
     override fun phaseStart() = AudioServicesPlaySystemSound(PHASE)
     override fun finished() = AudioServicesPlaySystemSound(FINISHED)
 }

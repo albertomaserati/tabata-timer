@@ -7,6 +7,9 @@ interface CuePlayer {
     /** Short beep for the last 3 seconds of an activity. */
     fun countdown()
 
+    /** Double beep: 10 seconds left in the current activity. */
+    fun tenSecondsLeft()
+
     /** Longer beep when a new activity starts. */
     fun phaseStart()
 

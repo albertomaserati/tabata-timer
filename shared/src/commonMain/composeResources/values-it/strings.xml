@@ -103,6 +103,8 @@
     <string name="settings_workout">Allenamento</string>
     <string name="settings_sound">Segnali sonori</string>
     <string name="settings_sound_hint">Bip negli ultimi 3 secondi e a ogni nuova attività</string>
+    <string name="settings_ten_seconds">Avviso a 10 secondi</string>
+    <string name="settings_ten_seconds_hint">Doppio bip quando mancano 10 secondi alla fine di ogni attività (solo per attività più lunghe di 10 secondi)</string>
     <string name="settings_about">Informazioni</string>
     <string name="about_version">Versione %1$s (%2$s)</string>
     <string name="about_developed_by">Sviluppata da Alberto Maserati</string>

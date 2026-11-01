@@ -53,6 +53,40 @@ class RunReducerTest {
     }
 
     @Test
+    fun emitsTenSecondsCueOnlyForStepsLongerThanTenSeconds() {
+        // Prepare 10 (no cue: not longer than 10s), Work 25, Rest 15, Work 25.
+        val longTimeline = WorkoutTimeline(
+            WorkoutPlanner.steps(WorkoutConfig(prepareSeconds = 10, sets = 1, plan = CyclePlan.Uniform(25, 15, 2))),
+        )
+        val longReducer = RunReducer(longTimeline)
+        var state = longReducer.initialState(null)
+        val effects = mutableListOf<RunEffect>()
+        var t = Duration.ZERO
+        while (state.status != RunStatus.Finished) {
+            val (s, e) = longReducer.reduce(state, RunAction.Tick(t))
+            state = s
+            effects += e
+            t += 100.milliseconds
+        }
+        assertEquals(3, effects.count { it == RunEffect.TenSecondsCue })
+        // Each warning comes 7 seconds before the countdown, i.e. before the step's first CountdownCue.
+        val firstWarning = effects.indexOf(RunEffect.TenSecondsCue)
+        assertEquals(RunEffect.PhaseStartCue(PhaseType.Work), effects[firstWarning - 1])
+        assertEquals(RunEffect.CountdownCue, effects[firstWarning + 1])
+    }
+
+    @Test
+    fun skippingWhilePausedDoesNotEmitTenSecondsCue() {
+        val longTimeline = WorkoutTimeline(
+            WorkoutPlanner.steps(WorkoutConfig(prepareSeconds = 0, sets = 1, plan = CyclePlan.Uniform(25, 15, 1))),
+        )
+        val longReducer = RunReducer(longTimeline)
+        val paused = longReducer.reduce(longReducer.initialState(null), RunAction.Pause(Duration.ZERO)).first
+        val (_, effects) = longReducer.reduce(paused, RunAction.Seek(15.seconds)) // 10s left
+        assertTrue(effects.isEmpty())
+    }
+
+    @Test
     fun pauseFreezesStateAndIgnoresTicks() {
         var (state, _) = reducer.reduce(reducer.initialState(null), RunAction.Tick(2.seconds))
         state = reducer.reduce(state, RunAction.Pause(2.5.seconds)).first

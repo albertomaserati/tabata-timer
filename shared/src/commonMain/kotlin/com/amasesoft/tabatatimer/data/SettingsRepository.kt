@@ -19,6 +19,8 @@ data class AppSettings(
     val theme: ThemeMode = ThemeMode.System,
     val workoutSort: WorkoutSort = WorkoutSort.Custom,
     val soundEnabled: Boolean = true,
+    /** Extra cue when 10 seconds are left in the current activity. */
+    val tenSecondWarning: Boolean = false,
     /** Last configuration used for a quick (unsaved) workout, restored next time. */
     val lastQuickConfig: WorkoutConfig = WorkoutConfig.Default,
 )

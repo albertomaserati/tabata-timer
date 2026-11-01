@@ -58,6 +58,7 @@ fun AppNavHost(
     navController: NavHostController,
     container: AppContainer,
     soundEnabled: Boolean,
+    tenSecondWarning: Boolean,
 ) {
     fun NavBackStackEntry.startRun(config: WorkoutConfig, title: String?, workoutId: Long?) = ifResumed {
         navController.navigate(
@@ -122,6 +123,7 @@ fun AppNavHost(
             RunScreen(
                 viewModel = viewModel,
                 soundEnabled = soundEnabled,
+                tenSecondWarning = tenSecondWarning,
                 onClose = { entry.back() },
             )
         }

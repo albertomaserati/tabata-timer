@@ -127,12 +127,14 @@ import tabatatimer.shared.generated.resources.run_total_remaining
 fun RunScreen(
     viewModel: RunViewModel,
     soundEnabled: Boolean,
+    tenSecondWarning: Boolean,
     onClose: () -> Unit,
 ) {
     val uiState = viewModel.state.collectAsStateWithLifecycle()
     val cuePlayer = rememberCuePlayer()
     val haptics = LocalHapticFeedback.current
     val currentSoundEnabled by rememberUpdatedState(soundEnabled)
+    val currentTenSecondWarning by rememberUpdatedState(tenSecondWarning)
     val currentOnClose by rememberUpdatedState(onClose)
 
     LaunchedEffect(viewModel) {
@@ -141,6 +143,11 @@ fun RunScreen(
                 RunEffect.CountdownCue -> {
                     if (currentSoundEnabled) cuePlayer.countdown()
                     haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                }
+
+                RunEffect.TenSecondsCue -> if (currentTenSecondWarning) {
+                    if (currentSoundEnabled) cuePlayer.tenSecondsLeft()
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                 }
 
                 is RunEffect.PhaseStartCue -> {

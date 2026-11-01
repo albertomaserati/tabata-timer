@@ -59,6 +59,8 @@ sealed interface RunAction {
 
 sealed interface RunEffect {
     data object CountdownCue : RunEffect
+    /** 10 seconds left in an activity longer than 10 seconds (optional, see settings). */
+    data object TenSecondsCue : RunEffect
     data class PhaseStartCue(val type: PhaseType) : RunEffect
     data object FinishedCue : RunEffect
     data object Close : RunEffect
@@ -128,7 +130,15 @@ class RunReducer(private val timeline: WorkoutTimeline) {
             new.displaySecondsInStep != old.displaySecondsInStep && new.displaySecondsInStep in 1..3 ->
                 state.copy(position = new) to listOf(RunEffect.CountdownCue)
 
+            // Steps of 10s or less would get it together with their own start cue: skipped.
+            new.displaySecondsInStep != old.displaySecondsInStep && new.displaySecondsInStep == TEN_SECONDS_WARNING &&
+                timeline.steps[new.stepIndex].durationSeconds > TEN_SECONDS_WARNING ->
+                state.copy(position = new) to listOf(RunEffect.TenSecondsCue)
+
             else -> state.copy(position = new) to emptyList()
         }
     }
 }
+
+/** Seconds left in an activity when the optional "almost over" cue plays. */
+const val TEN_SECONDS_WARNING = 10

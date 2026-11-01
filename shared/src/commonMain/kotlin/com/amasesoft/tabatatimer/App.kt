@@ -46,6 +46,7 @@ fun App(container: AppContainer) {
                         navController = navController,
                         container = container,
                         soundEnabled = current.soundEnabled,
+                        tenSecondWarning = current.tenSecondWarning,
                     )
                 }
             }
