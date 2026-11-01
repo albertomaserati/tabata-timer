@@ -18,19 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.semantics.Role
 import org.jetbrains.compose.resources.pluralStringResource
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -71,6 +60,8 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import com.amasesoft.tabatatimer.components.CountSelector
+import com.amasesoft.tabatatimer.components.DashedAddCard
+import com.amasesoft.tabatatimer.components.SectionCard
 import com.amasesoft.tabatatimer.components.TimeSelector
 import com.amasesoft.tabatatimer.domain.MAX_SAVED_WORKOUTS
 import com.amasesoft.tabatatimer.domain.WorkoutConfig
@@ -90,7 +81,6 @@ import tabatatimer.shared.generated.resources.editor_add_cycle_hint
 import tabatatimer.shared.generated.resources.editor_add_cycle_n
 import tabatatimer.shared.generated.resources.editor_cycle_count
 import tabatatimer.shared.generated.resources.editor_max_cycles
-import tabatatimer.shared.generated.resources.ic_add
 import tabatatimer.shared.generated.resources.editor_advanced
 import tabatatimer.shared.generated.resources.editor_advanced_hint
 import tabatatimer.shared.generated.resources.editor_cycle_default_name
@@ -485,30 +475,6 @@ private fun ModeSelector(isAdvanced: Boolean, onAdvancedChange: (Boolean) -> Uni
 }
 
 @Composable
-private fun SectionCard(
-    modifier: Modifier = Modifier,
-    title: String? = null,
-    content: @Composable () -> Unit,
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            if (title != null) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.semantics { heading() },
-                )
-            }
-            content()
-        }
-    }
-}
-
-@Composable
 private fun CycleCard(
     index: Int,
     cycle: EditableCycle,
@@ -673,10 +639,7 @@ private fun CyclesHeader(count: Int, modifier: Modifier = Modifier) {
     }
 }
 
-/**
- * "Empty next cycle" placeholder: same shape and width as [CycleCard], dashed primary border,
- * light primaryContainer fill and a filled "+" so it reads as an action at a glance.
- */
+/** "Empty next cycle" placeholder: the shared dashed add card. */
 @Composable
 private fun AddCycleCard(
     nextNumber: Int,
@@ -684,60 +647,15 @@ private fun AddCycleCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = CardDefaults.shape
-    val primary = MaterialTheme.colorScheme.primary
-    val dashColor = if (enabled) primary else MaterialTheme.colorScheme.outline
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = 72.dp)
-            // Drawn before the clip so the whole stroke stays visible.
-            .drawBehind {
-                val strokeWidth = 2.dp.toPx()
-                drawOutline(
-                    outline = shape.createOutline(size, layoutDirection, this),
-                    color = dashColor,
-                    style = Stroke(
-                        width = strokeWidth,
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(), 6.dp.toPx())),
-                    ),
-                )
-            }
-            .clip(shape)
-            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.18f))
-            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
-            .alpha(if (enabled) 1f else 0.6f)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier.size(40.dp).background(dashColor, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painterResource(Res.drawable.ic_add),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary,
-            )
-        }
-        Spacer(Modifier.width(16.dp))
-        Column(Modifier.weight(1f)) {
-            Text(
-                text = if (enabled) {
-                    stringResource(Res.string.editor_add_cycle_n, nextNumber)
-                } else {
-                    stringResource(Res.string.editor_max_cycles, Limits.cycles.last)
-                },
-                style = MaterialTheme.typography.titleMedium,
-                color = if (enabled) primary else MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            if (enabled) {
-                Text(
-                    text = stringResource(Res.string.editor_add_cycle_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
+    DashedAddCard(
+        title = if (enabled) {
+            stringResource(Res.string.editor_add_cycle_n, nextNumber)
+        } else {
+            stringResource(Res.string.editor_max_cycles, Limits.cycles.last)
+        },
+        hint = stringResource(Res.string.editor_add_cycle_hint),
+        enabled = enabled,
+        onClick = onClick,
+        modifier = modifier,
+    )
 }

@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -69,14 +70,34 @@ internal val DigitEntrySaver = Saver<DigitEntry, List<Any>>(
         when (entry) {
             is DurationEntry -> listOf("d", entry.digits, entry.isPristine, 0)
             is CountEntry -> listOf("c", entry.digits, entry.isPristine, entry.maxDigits)
+            is WeightEntry -> listOf("w", entry.digits, entry.isPristine, entry.decimalSeparator.toString(), entry.half)
         }
     },
     restore = { saved ->
         val digits = saved[1] as String
         val pristine = saved[2] as Boolean
-        if (saved[0] == "d") DurationEntry(digits, pristine) else CountEntry(digits, saved[3] as Int, pristine)
+        when (saved[0]) {
+            "d" -> DurationEntry(digits, pristine)
+            "w" -> WeightEntry(digits, half = saved[4] as Boolean, decimalSeparator = (saved[3] as String)[0], isPristine = pristine)
+            else -> CountEntry(digits, saved[3] as Int, pristine)
+        }
     },
 )
+
+/** Optional key left of 0 on the keypad. */
+@Immutable
+sealed interface ExtraKey {
+    data object None : ExtraKey
+
+    /** "00", for durations. */
+    data object DoubleZero : ExtraKey
+
+    /**
+     * Adds/removes the half kilo ([DigitEntry.toggleHalf]); [label] is e.g. ",5" or ".5",
+     * [spokenLabel] what screen readers announce ("Half kilo").
+     */
+    data class Half(val label: String, val spokenLabel: String) : ExtraKey
+}
 
 /**
  * Dialog to type a value with an on-screen numeric keypad.
@@ -99,7 +120,7 @@ internal fun ValueEntryDialog(
     presets: List<Int>,
     format: (Int) -> String,
     entryFor: (Int) -> DigitEntry,
-    showDoubleZero: Boolean,
+    extraKey: ExtraKey,
     onConfirm: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -127,6 +148,7 @@ internal fun ValueEntryDialog(
                     val char = event.utf16CodePoint.toChar()
                     when {
                         char in '0'..'9' -> { entry = entry.type(char - '0'); true }
+                        extraKey is ExtraKey.Half && (char == ',' || char == '.') -> { entry = entry.toggleHalf(); true }
                         event.key == Key.Backspace || event.key == Key.Delete -> { entry = entry.backspace(); true }
                         event.key == Key.Enter || event.key == Key.NumPadEnter -> { confirm(); true }
                         else -> false
@@ -155,9 +177,15 @@ internal fun ValueEntryDialog(
                 val keypad: @Composable () -> Unit = {
                     Keypad(
                         columns = if (sideBySide) 4 else 3,
-                        showDoubleZero = showDoubleZero,
+                        extraKey = extraKey,
                         onDigit = { entry = entry.type(it) },
-                        onDoubleZero = { entry = entry.type(0).type(0) },
+                        onExtra = {
+                            entry = when (extraKey) {
+                                ExtraKey.DoubleZero -> entry.type(0).type(0)
+                                is ExtraKey.Half -> entry.toggleHalf()
+                                ExtraKey.None -> entry
+                            }
+                        },
                         onBackspace = { entry = entry.backspace() },
                     )
                 }
@@ -267,15 +295,19 @@ private val KeyPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
 
 private sealed interface PadKey {
     data class Digit(val value: Int) : PadKey
-    data object DoubleZero : PadKey
+    data class Extra(val label: String, val spokenLabel: String? = null) : PadKey
     data object Backspace : PadKey
     data object Empty : PadKey
 }
 
 /** 3 columns (phone layout) in portrait; 4 columns, i.e. only 3 rows, when space is short. */
-private fun padLayout(columns: Int, showDoubleZero: Boolean): List<List<PadKey>> {
+private fun padLayout(columns: Int, extraKey: ExtraKey): List<List<PadKey>> {
     val digits = (1..9).map { PadKey.Digit(it) }
-    val extra = if (showDoubleZero) PadKey.DoubleZero else PadKey.Empty
+    val extra = when (extraKey) {
+        ExtraKey.None -> PadKey.Empty
+        ExtraKey.DoubleZero -> PadKey.Extra("00")
+        is ExtraKey.Half -> PadKey.Extra(extraKey.label, extraKey.spokenLabel)
+    }
     return if (columns == 4) {
         (digits + PadKey.Digit(0) + extra + PadKey.Backspace).chunked(4)
     } else {
@@ -286,19 +318,19 @@ private fun padLayout(columns: Int, showDoubleZero: Boolean): List<List<PadKey>>
 @Composable
 private fun Keypad(
     columns: Int,
-    showDoubleZero: Boolean,
+    extraKey: ExtraKey,
     onDigit: (Int) -> Unit,
-    onDoubleZero: () -> Unit,
+    onExtra: () -> Unit,
     onBackspace: () -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-        padLayout(columns, showDoubleZero).forEach { row ->
+        padLayout(columns, extraKey).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 row.forEach { key ->
                     val keyModifier = Modifier.weight(1f)
                     when (key) {
                         is PadKey.Digit -> KeypadKey(key.value.toString(), { onDigit(key.value) }, keyModifier)
-                        PadKey.DoubleZero -> KeypadKey("00", onDoubleZero, keyModifier)
+                        is PadKey.Extra -> KeypadKey(key.label, onExtra, keyModifier, key.spokenLabel)
                         PadKey.Empty -> Box(keyModifier)
                         PadKey.Backspace -> FilledTonalButton(
                             onClick = onBackspace,
@@ -319,8 +351,19 @@ private fun Keypad(
 }
 
 @Composable
-private fun KeypadKey(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    FilledTonalButton(onClick = onClick, modifier = modifier.heightIn(min = 52.dp), contentPadding = KeyPadding) {
+private fun KeypadKey(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    spokenLabel: String? = null,
+) {
+    FilledTonalButton(
+        onClick = onClick,
+        modifier = modifier
+            .heightIn(min = 52.dp)
+            .then(if (spokenLabel != null) Modifier.semantics { contentDescription = spokenLabel } else Modifier),
+        contentPadding = KeyPadding,
+    ) {
         Text(text, style = MaterialTheme.typography.titleLarge.merge(TabularNumbers), maxLines = 1, softWrap = false)
     }
 }

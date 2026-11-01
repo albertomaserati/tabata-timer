@@ -159,4 +159,77 @@
     <string name="editor_name_taken">Esiste già un workout con questo nome</string>
     <string name="home_load_error">Impossibile leggere i workout</string>
     <string name="action_retry">Riprova</string>
+    <!-- Schede principali -->
+    <string name="tab_timer">Timer</string>
+    <string name="tab_routines">Schede</string>
+
+    <!-- Schede (palestra) -->
+    <string name="routines_title">Schede</string>
+    <string name="routines_manage">Gestisci schede</string>
+    <string name="routines_selector_label">Scheda</string>
+    <string name="routines_load_error">Impossibile leggere le schede</string>
+    <string name="routines_empty_title">Crea la tua prima scheda</string>
+    <string name="routines_empty_message">Una scheda è l’elenco dei tuoi esercizi in palestra, con serie, ripetizioni e peso. Consultala e aggiornala mentre ti alleni.</string>
+    <string name="routines_new">Nuova scheda</string>
+    <string name="routines_new_hint">Dalle un nome, poi aggiungi gli esercizi</string>
+    <string name="routines_max">Massimo %1$d schede</string>
+    <string name="routine_limit_reached">Puoi creare al massimo %1$d schede. Eliminane una per crearne una nuova.</string>
+    <string name="routine_empty_title">Nessun esercizio</string>
+    <string name="routine_empty_message">Aggiungi il primo esercizio di “%1$s”.</string>
+    <string name="exercise_add">Esercizio</string>
+    <string name="exercise_limit_reached">Una scheda può avere al massimo %1$d esercizi. Eliminane uno per aggiungerne uno nuovo.</string>
+    <plurals name="routine_exercise_count">
+        <item quantity="one">%1$d esercizio</item>
+        <item quantity="other">%1$d esercizi</item>
+    </plurals>
+    <string name="exercise_sets_reps">%1$d×%2$d</string>
+    <string name="progression_increase_badge">+%1$s</string>
+    <string name="progression_repeat">Ripeti</string>
+    <string name="progression_increase">Aumenta</string>
+    <string name="a11y_progression">Prossima volta, %1$s</string>
+    <string name="a11y_progression_increase_state">Aumenta di %1$s</string>
+    <string name="a11y_progression_repeat_state">Ripeti il peso</string>
+    <string name="exercise_next_time">Prossima volta: %1$s</string>
+    <string name="action_apply">Applica</string>
+    <string name="a11y_apply">Applica %1$s a %2$s</string>
+    <string name="exercise_weight_updated">Peso aggiornato a %1$s</string>
+    <string name="action_undo">Annulla</string>
+    <string name="action_rename">Rinomina</string>
+    <string name="action_duplicate">Duplica</string>
+    <string name="action_move_up">Sposta su</string>
+    <string name="action_move_down">Sposta giù</string>
+    <string name="routine_copy_word">copia</string>
+    <string name="routine_rename_title">Rinomina scheda</string>
+    <string name="routine_name">Nome della scheda</string>
+    <string name="routine_name_taken">Esiste già una scheda con questo nome</string>
+    <string name="name_too_long">Massimo %1$d caratteri</string>
+    <string name="char_counter">%1$d/%2$d</string>
+    <string name="routine_delete_title">Eliminare la scheda?</string>
+    <string name="routine_delete_message">“%1$s” e tutti i suoi esercizi verranno eliminati definitivamente.</string>
+
+    <!-- Editor esercizio -->
+    <string name="exercise_title_new">Nuovo esercizio</string>
+    <string name="exercise_title_edit">Modifica esercizio</string>
+    <string name="exercise_name">Nome dell’esercizio</string>
+    <string name="exercise_volume_section">Serie e ripetizioni</string>
+    <string name="exercise_sets">Serie</string>
+    <string name="exercise_reps">Ripetizioni</string>
+    <string name="exercise_weight_section">Peso</string>
+    <string name="exercise_use_weight">Usa peso</string>
+    <string name="exercise_use_weight_hint">Disattiva per gli esercizi a corpo libero</string>
+    <string name="exercise_weight">Peso</string>
+    <string name="exercise_weight_hint">Uguale per tutte le serie</string>
+    <string name="exercise_progression_section">La prossima volta</string>
+    <string name="exercise_progression_increase_hint">Nella scheda, “Applica” aggiunge l’incremento e torna su Ripeti</string>
+    <string name="exercise_progression_no_weight_hint">Senza peso, Aumenta è solo un promemoria</string>
+    <string name="exercise_progression_repeat_hint">Mantieni lo stesso peso la prossima volta</string>
+    <string name="exercise_increment">Incremento</string>
+    <string name="exercise_increment_other">Altro…</string>
+    <string name="exercise_delete_title">Eliminare l’esercizio?</string>
+    <string name="exercise_delete_message">“%1$s” verrà eliminato definitivamente.</string>
+
+    <!-- Pesi -->
+    <string name="decimal_separator">,</string>
+    <string name="unit_kg">kg</string>
+    <string name="a11y_half_kilo">Mezzo chilo</string>
 </resources>

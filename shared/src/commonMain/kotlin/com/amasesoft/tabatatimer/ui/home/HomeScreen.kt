@@ -11,15 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import tabatatimer.shared.generated.resources.action_retry
 import tabatatimer.shared.generated.resources.home_load_error
-import tabatatimer.shared.generated.resources.ic_error
-import tabatatimer.shared.generated.resources.ic_replay
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amasesoft.tabatatimer.components.LoadErrorState
 import com.amasesoft.tabatatimer.domain.MAX_SAVED_WORKOUTS
 import com.amasesoft.tabatatimer.domain.SavedWorkout
 import com.amasesoft.tabatatimer.domain.WorkoutSort
@@ -128,6 +122,8 @@ fun HomeScreen(
     onEditWorkout: (Long) -> Unit,
     onStartWorkout: (SavedWorkout) -> Unit,
     onSettings: () -> Unit,
+    /** Main tabs bar (Timer | Routines), provided by the navigation host. */
+    bottomBar: @Composable () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -189,6 +185,7 @@ fun HomeScreen(
                 )
             }
         },
+        bottomBar = bottomBar,
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         LazyColumn(
@@ -212,7 +209,11 @@ fun HomeScreen(
                 }
 
                 state.loadError -> item(key = "error") {
-                    LoadErrorState(onRetry = viewModel::reload, modifier = Modifier.animateItem())
+                    LoadErrorState(
+                        message = stringResource(Res.string.home_load_error),
+                        onRetry = viewModel::reload,
+                        modifier = Modifier.animateItem(),
+                    )
                 }
 
                 else -> item(key = "header") {
@@ -321,36 +322,6 @@ private fun QuickWorkoutCard(onClick: () -> Unit, modifier: Modifier = Modifier)
                 Text(stringResource(Res.string.quick_workout), style = MaterialTheme.typography.titleLarge)
                 Text(stringResource(Res.string.home_quick_subtitle), style = MaterialTheme.typography.bodyMedium)
             }
-        }
-    }
-}
-
-/** Read error: the list is unknown, so it is not shown as empty. */
-@Composable
-private fun LoadErrorState(onRetry: () -> Unit, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxWidth().padding(vertical = 32.dp, horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Icon(
-            painterResource(Res.drawable.ic_error),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.error,
-            modifier = Modifier.size(40.dp),
-        )
-        Spacer(Modifier.height(12.dp))
-        Text(
-            text = stringResource(Res.string.home_load_error),
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            // Announced when it appears.
-            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-        )
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp)) {
-            Icon(painterResource(Res.drawable.ic_replay), contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(Res.string.action_retry))
         }
     }
 }

@@ -38,6 +38,10 @@ private val LightColorScheme = lightColorScheme(
     surfaceContainerHighest = LightSurfaceContainerHighest,
     outline = LightOutline,
     outlineVariant = LightOutlineVariant,
+    // Snackbars (e.g. the "Undo" action): brand-tinted instead of the baseline purple.
+    inverseSurface = LightOnBackground,
+    inverseOnSurface = LightSurfaceContainer,
+    inversePrimary = Teal80,
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -66,6 +70,9 @@ private val DarkColorScheme = darkColorScheme(
     surfaceContainerHighest = DarkSurfaceContainerHighest,
     outline = DarkOutline,
     outlineVariant = DarkOutlineVariant,
+    inverseSurface = DarkOnBackground,
+    inverseOnSurface = DarkSurfaceContainer,
+    inversePrimary = LogoTeal,
 )
 
 /** Accent color for each workout phase. */

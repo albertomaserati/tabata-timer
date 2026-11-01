@@ -12,6 +12,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.toRoute
 import com.amasesoft.tabatatimer.data.StorageJson
 import com.amasesoft.tabatatimer.di.AppContainer
@@ -21,6 +23,12 @@ import com.amasesoft.tabatatimer.ui.editor.EditorScreen
 import com.amasesoft.tabatatimer.ui.editor.EditorViewModel
 import com.amasesoft.tabatatimer.ui.home.HomeScreen
 import com.amasesoft.tabatatimer.ui.home.HomeViewModel
+import com.amasesoft.tabatatimer.ui.routines.ExerciseEditorScreen
+import com.amasesoft.tabatatimer.ui.routines.ExerciseEditorViewModel
+import com.amasesoft.tabatatimer.ui.routines.ManageRoutinesScreen
+import com.amasesoft.tabatatimer.ui.routines.ManageRoutinesViewModel
+import com.amasesoft.tabatatimer.ui.routines.RoutinesScreen
+import com.amasesoft.tabatatimer.ui.routines.RoutinesViewModel
 import com.amasesoft.tabatatimer.ui.run.RunScreen
 import com.amasesoft.tabatatimer.ui.run.RunViewModel
 import com.amasesoft.tabatatimer.ui.settings.SettingsScreen
@@ -46,6 +54,16 @@ data class RunRoute(val configJson: String, val title: String? = null, val worko
 @Serializable
 data object SettingsRoute
 
+/** "Routines" tab (gym routines), the second top-level destination. */
+@Serializable
+data object RoutinesRoute
+
+@Serializable
+data object ManageRoutinesRoute
+
+@Serializable
+data class ExerciseEditorRoute(val routineId: Long, val exerciseId: Long = NO_ID)
+
 const val NO_ID = -1L
 
 /**
@@ -56,6 +74,10 @@ const val NO_ID = -1L
 private inline fun NavBackStackEntry.ifResumed(block: () -> Unit) {
     if (lifecycle.currentState == Lifecycle.State.RESUMED) block()
 }
+
+/** Destinations that show the bottom bar. */
+private fun NavBackStackEntry.isTopLevel(): Boolean =
+    destination.hasRoute<HomeRoute>() || destination.hasRoute<RoutinesRoute>()
 
 @Composable
 fun AppNavHost(
@@ -76,13 +98,35 @@ fun AppNavHost(
 
     fun NavBackStackEntry.back() = ifResumed { navController.popBackStack() }
 
+    /**
+     * Standard bottom-navigation switch: the Timer tab (start destination) stays at the bottom of
+     * the stack, so system back from Routines goes to Timer and then exits; each tab keeps its
+     * state (ViewModel, scroll) across switches.
+     */
+    fun NavBackStackEntry.switchTab(tab: MainTab) = ifResumed {
+        val route: Any = when (tab) {
+            MainTab.Timer -> HomeRoute
+            MainTab.Routines -> RoutinesRoute
+        }
+        navController.navigate(route) {
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = HomeRoute,
-        enterTransition = { slideInHorizontally { it / 4 } + fadeIn() },
+        // Between tabs a plain crossfade; into/out of detail screens the usual slide.
+        enterTransition = {
+            if (initialState.isTopLevel() && targetState.isTopLevel()) fadeIn() else slideInHorizontally { it / 4 } + fadeIn()
+        },
         exitTransition = { fadeOut() },
         popEnterTransition = { fadeIn() },
-        popExitTransition = { slideOutHorizontally { it / 4 } + fadeOut() },
+        popExitTransition = {
+            if (initialState.isTopLevel() && targetState.isTopLevel()) fadeOut() else slideOutHorizontally { it / 4 } + fadeOut()
+        },
     ) {
         composable<HomeRoute> { entry ->
             val viewModel = viewModel { HomeViewModel(container.workoutRepository, container.settingsRepository) }
@@ -93,7 +137,41 @@ fun AppNavHost(
                 onEditWorkout = { id -> entry.ifResumed { navController.navigate(EditorRoute(EditorMode.Edit, id)) } },
                 onStartWorkout = { workout -> entry.startRun(workout.config, workout.name, workout.id) },
                 onSettings = { entry.ifResumed { navController.navigate(SettingsRoute) } },
+                bottomBar = { MainTabsBar(selected = MainTab.Timer, onSelect = { entry.switchTab(it) }) },
             )
+        }
+
+        composable<RoutinesRoute> { entry ->
+            val viewModel = viewModel { RoutinesViewModel(container.gymRepository) }
+            RoutinesScreen(
+                viewModel = viewModel,
+                onAddExercise = { routineId ->
+                    entry.ifResumed { navController.navigate(ExerciseEditorRoute(routineId)) }
+                },
+                onEditExercise = { routineId, exerciseId ->
+                    entry.ifResumed { navController.navigate(ExerciseEditorRoute(routineId, exerciseId)) }
+                },
+                onManage = { entry.ifResumed { navController.navigate(ManageRoutinesRoute) { launchSingleTop = true } } },
+                onSettings = { entry.ifResumed { navController.navigate(SettingsRoute) } },
+                bottomBar = { MainTabsBar(selected = MainTab.Routines, onSelect = { entry.switchTab(it) }) },
+            )
+        }
+
+        composable<ManageRoutinesRoute> { entry ->
+            val viewModel = viewModel { ManageRoutinesViewModel(container.gymRepository) }
+            ManageRoutinesScreen(viewModel = viewModel, onBack = { entry.back() })
+        }
+
+        composable<ExerciseEditorRoute> { entry ->
+            val route = entry.toRoute<ExerciseEditorRoute>()
+            val viewModel = viewModel {
+                ExerciseEditorViewModel(
+                    routineId = route.routineId,
+                    exerciseId = route.exerciseId.takeIf { it != NO_ID },
+                    repository = container.gymRepository,
+                )
+            }
+            ExerciseEditorScreen(viewModel = viewModel, onBack = { entry.back() })
         }
 
         composable<EditorRoute>(typeMap = EditorRouteTypeMap) { entry ->

@@ -159,4 +159,77 @@
     <string name="editor_name_taken">A workout with this name already exists</string>
     <string name="home_load_error">Couldn’t read your workouts</string>
     <string name="action_retry">Retry</string>
+    <!-- Main tabs -->
+    <string name="tab_timer">Timer</string>
+    <string name="tab_routines">Routines</string>
+
+    <!-- Routines (gym) -->
+    <string name="routines_title">Routines</string>
+    <string name="routines_manage">Manage routines</string>
+    <string name="routines_selector_label">Routine</string>
+    <string name="routines_load_error">Couldn’t read your routines</string>
+    <string name="routines_empty_title">Create your first routine</string>
+    <string name="routines_empty_message">A routine is your list of gym exercises, with sets, reps and weight. Check and update it while you train.</string>
+    <string name="routines_new">New routine</string>
+    <string name="routines_new_hint">Give it a name, then add the exercises</string>
+    <string name="routines_max">Maximum %1$d routines</string>
+    <string name="routine_limit_reached">You can create up to %1$d routines. Delete one to create a new one.</string>
+    <string name="routine_empty_title">No exercises yet</string>
+    <string name="routine_empty_message">Add the first exercise of “%1$s”.</string>
+    <string name="exercise_add">Exercise</string>
+    <string name="exercise_limit_reached">A routine can have up to %1$d exercises. Delete one to add a new one.</string>
+    <plurals name="routine_exercise_count">
+        <item quantity="one">%1$d exercise</item>
+        <item quantity="other">%1$d exercises</item>
+    </plurals>
+    <string name="exercise_sets_reps">%1$d×%2$d</string>
+    <string name="progression_increase_badge">+%1$s</string>
+    <string name="progression_repeat">Repeat</string>
+    <string name="progression_increase">Increase</string>
+    <string name="a11y_progression">Next time, %1$s</string>
+    <string name="a11y_progression_increase_state">Increase by %1$s</string>
+    <string name="a11y_progression_repeat_state">Repeat the weight</string>
+    <string name="exercise_next_time">Next time: %1$s</string>
+    <string name="action_apply">Apply</string>
+    <string name="a11y_apply">Apply %1$s to %2$s</string>
+    <string name="exercise_weight_updated">Weight updated to %1$s</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_duplicate">Duplicate</string>
+    <string name="action_move_up">Move up</string>
+    <string name="action_move_down">Move down</string>
+    <string name="routine_copy_word">copy</string>
+    <string name="routine_rename_title">Rename routine</string>
+    <string name="routine_name">Routine name</string>
+    <string name="routine_name_taken">A routine with this name already exists</string>
+    <string name="name_too_long">Maximum %1$d characters</string>
+    <string name="char_counter">%1$d/%2$d</string>
+    <string name="routine_delete_title">Delete routine?</string>
+    <string name="routine_delete_message">“%1$s” and all its exercises will be permanently deleted.</string>
+
+    <!-- Exercise editor -->
+    <string name="exercise_title_new">New exercise</string>
+    <string name="exercise_title_edit">Edit exercise</string>
+    <string name="exercise_name">Exercise name</string>
+    <string name="exercise_volume_section">Sets and reps</string>
+    <string name="exercise_sets">Sets</string>
+    <string name="exercise_reps">Reps</string>
+    <string name="exercise_weight_section">Weight</string>
+    <string name="exercise_use_weight">Use weight</string>
+    <string name="exercise_use_weight_hint">Turn off for bodyweight exercises</string>
+    <string name="exercise_weight">Weight</string>
+    <string name="exercise_weight_hint">Same for every set</string>
+    <string name="exercise_progression_section">Next time</string>
+    <string name="exercise_progression_increase_hint">On the routine, “Apply” adds the increment and switches back to Repeat</string>
+    <string name="exercise_progression_no_weight_hint">Without a weight, Increase is just a reminder</string>
+    <string name="exercise_progression_repeat_hint">Keep the same weight next time</string>
+    <string name="exercise_increment">Increment</string>
+    <string name="exercise_increment_other">Other…</string>
+    <string name="exercise_delete_title">Delete exercise?</string>
+    <string name="exercise_delete_message">“%1$s” will be permanently deleted.</string>
+
+    <!-- Weights -->
+    <string name="decimal_separator">.</string>
+    <string name="unit_kg">kg</string>
+    <string name="a11y_half_kilo">Half kilo</string>
 </resources>

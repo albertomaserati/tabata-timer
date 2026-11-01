@@ -50,9 +50,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.amasesoft.tabatatimer.domain.ExerciseLimits
 import com.amasesoft.tabatatimer.domain.formatSeconds
 import com.amasesoft.tabatatimer.theme.AppTheme
 import com.amasesoft.tabatatimer.theme.TabularNumbers
@@ -98,7 +100,7 @@ fun TimeSelector(
         format = ::formatSeconds,
         entryFor = DurationEntry::of,
         presets = presets,
-        showDoubleZero = true,
+        extraKey = ExtraKey.DoubleZero,
         stepUp = { v -> if (v >= 60) 5 else 1 },
         stepDown = { v -> if (v > 60) 5 else 1 },
         modifier = modifier,
@@ -107,6 +109,47 @@ fun TimeSelector(
         accessibilityContext = accessibilityContext,
     )
 }
+
+/**
+ * Stepper for a weight in **half kilograms** (`25` = 12.5 kg), shown as "12,5 kg".
+ *
+ * Steps by 0.5 kg up to 20 kg and by 1 kg above (as [TimeSelector] switches to 5s steps above
+ * one minute); hold to accelerate. Tapping the value opens the keypad with a ",5" key.
+ */
+@Composable
+fun WeightSelector(
+    title: String,
+    valueHalfKg: Int,
+    onValueChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    range: IntRange = ExerciseLimits.weightHalfKg,
+    enabled: Boolean = true,
+    supportingText: String? = null,
+    presets: List<Int> = emptyList(),
+    accessibilityContext: String? = null,
+) {
+    val weightFormat = rememberWeightFormat()
+    ValueStepper(
+        title = title,
+        value = valueHalfKg,
+        onValueChange = onValueChange,
+        range = range,
+        format = weightFormat::withUnit,
+        entryFor = { WeightEntry.of(it, weightFormat.decimalSeparator) },
+        presets = presets,
+        extraKey = weightFormat.halfKey,
+        valueMinWidth = 112.dp,
+        stepUp = { v -> if (v >= WEIGHT_COARSE_FROM) 2 else 1 },
+        stepDown = { v -> if (v > WEIGHT_COARSE_FROM) 2 else 1 },
+        modifier = modifier,
+        enabled = enabled,
+        supportingText = supportingText,
+        accessibilityContext = accessibilityContext,
+    )
+}
+
+/** From 20 kg (40 half kilos) up, +/- move by 1 kg. */
+private const val WEIGHT_COARSE_FROM = 40
 
 /** Duration presets offered by default (filtered by range). */
 val DefaultDurationPresets = listOf(10, 20, 30, 45, 60, 90)
@@ -133,7 +176,7 @@ fun CountSelector(
         format = Int::toString,
         entryFor = { CountEntry.of(it, range) },
         presets = presets,
-        showDoubleZero = false,
+        extraKey = ExtraKey.None,
         stepUp = { 1 },
         stepDown = { 1 },
         modifier = modifier,
@@ -152,7 +195,9 @@ private fun ValueStepper(
     format: (Int) -> String,
     entryFor: (Int) -> DigitEntry,
     presets: List<Int>,
-    showDoubleZero: Boolean,
+    extraKey: ExtraKey,
+    /** Minimum width of the value: wide enough for the longest value, so +/- do not move. */
+    valueMinWidth: Dp = 72.dp,
     stepUp: (Int) -> Int,
     stepDown: (Int) -> Int,
     modifier: Modifier,
@@ -226,7 +271,7 @@ private fun ValueStepper(
         val editLabel = stringResource(Res.string.a11y_edit_value, a11yTitle)
         Box(
             modifier = Modifier
-                .widthIn(min = 72.dp)
+                .widthIn(min = valueMinWidth)
                 .heightIn(min = 48.dp)
                 .clip(MaterialTheme.shapes.small)
                 .background(
@@ -282,7 +327,7 @@ private fun ValueStepper(
             presets = presets,
             format = format,
             entryFor = entryFor,
-            showDoubleZero = showDoubleZero,
+            extraKey = extraKey,
             onConfirm = { confirmed ->
                 showEntryDialog = false
                 onValueChange(confirmed)
@@ -297,7 +342,7 @@ private fun ValueStepper(
  * large font scale) the font is shrunk step by step, without drawing, until it no longer does.
  */
 @Composable
-private fun WholeWordsText(
+internal fun WholeWordsText(
     text: String,
     style: TextStyle,
     color: Color,
@@ -384,6 +429,7 @@ private fun TimeSelectorPreview() {
             TimeSelector(title = "Work", value = 20, onValueChange = {})
             TimeSelector(title = "Rest between sets", value = 90, onValueChange = {}, supportingText = "Skipped after last set")
             CountSelector(title = "Cycles", value = 8, onValueChange = {})
+            WeightSelector(title = "Weight", valueHalfKg = 25, onValueChange = {})
             TimeSelector(title = "Rest", value = 10, onValueChange = {}, enabled = false)
         }
     }

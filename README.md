@@ -19,7 +19,7 @@ apps are thin entry points.
 ## Architecture
 
 Pure domain logic (workout planner, timeline, a clock based on a monotonic time source so the timer never drifts) sits apart from the UI and repositories, with manual dependency injection.
-The run screen uses MVI because a running workout is a state machine with a pure, testable reducer; home, editor and settings are forms and lists, so they use simpler MVVM.
+The run screen uses MVI because a running workout is a state machine with a pure, testable reducer; home, editor, settings and routines are forms and lists, so they use simpler MVVM.
 
 ## Features
 
@@ -35,6 +35,14 @@ The run screen uses MVI because a running workout is a state machine with a pure
 - **Run screen**: progress ring with phase colors, remaining seconds of the current activity, its name, next activity,
   total time remaining, set/cycle indicators, pause/resume, skip, stop. Audio and haptic cues (can be turned off), an optional
   warning 10 seconds before the end of an activity, screen kept on. The timer is drift-free and auto-pauses when the app goes to the background.
+- **Routines** ("Schede", second tab of the bottom bar): gym routines, independent from the timer, to check and update
+  while training. Up to 20 routines with unique names, up to 50 exercises each. Each exercise has name, optional
+  description, sets × reps, an optional weight (half-kilo steps, same for every set) and what to do next time:
+  **Increase** (with an increment, default 2 kg) or **Repeat**. The progression badge on the card toggles with a tap;
+  for Increase, "Next time: 16 kg" + **Apply** updates the weight and switches back to Repeat, with Undo.
+  Up to 3 routines are switched with segmented buttons, from 4 with a dropdown; the last routine shown is remembered.
+  A separate screen renames, duplicates, deletes and reorders routines. Weights are typed with the same keypad,
+  with a ",5" key for the half kilo.
 - **Languages**: Italian and English, switchable inside the app (or following the system).
 - **Theme**: light, dark or system.
 - **About** section in the settings with the app version and a link to the developer website.
@@ -71,9 +79,10 @@ Tests live in `shared/src/commonTest` and run on both platforms:
 
 - [`shared/src/commonMain`](./shared/src/commonMain/kotlin/com/amasesoft/tabatatimer) (package `com.amasesoft.tabatatimer`)
   - `domain/` – pure Kotlin: workout model, planner (config → steps), timeline, drift-free clock, sorting.
-  - `data/` – persistence with DataStore + kotlinx.serialization (JSON files for workouts and settings).
-  - `ui/` – screens: `home`, `editor`, `run` (MVI), `settings`; `navigation` with type-safe routes.
-  - `components/` – reusable composables (steppers, value-entry dialog).
+  - `data/` – persistence with DataStore + kotlinx.serialization (JSON files for workouts, settings and gym routines).
+  - `ui/` – screens: `home`, `editor`, `run` (MVI), `settings`, `routines` (gym routines tab, manage routines,
+    exercise editor); `navigation` with type-safe routes and the bottom bar.
+  - `components/` – reusable composables (steppers, value-entry dialog, cards, weight formatting).
   - `theme/` – Material 3 theme, phase colors, typography.
   - `platform/` – `expect` declarations (in-app locale, keep screen on, sound/haptic cues, system bars).
   - `composeResources/` – strings (`values` English, `values-it` Italian) and vector icons.
@@ -88,3 +97,4 @@ Dependency versions are centralized in [`gradle/libs.versions.toml`](./gradle/li
 ## Known limitations
 
 - No background execution: the run pauses when the app leaves the foreground and must be resumed manually.
+- Routines have no history and no workout mode: Apply overwrites the weight (Undo only right after).

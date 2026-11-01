@@ -2,6 +2,7 @@ package com.amasesoft.tabatatimer.components
 
 import androidx.compose.runtime.Immutable
 import com.amasesoft.tabatatimer.domain.formatSeconds
+import com.amasesoft.tabatatimer.domain.formatWeight
 
 /**
  * Pure state of the digit-by-digit entry used by the value dialogs (no Compose, unit tested).
@@ -25,6 +26,9 @@ sealed interface DigitEntry {
 
     fun type(digit: Int): DigitEntry
     fun backspace(): DigitEntry
+
+    /** The ",5" key; only [WeightEntry] supports it, other entries ignore it. */
+    fun toggleHalf(): DigitEntry = this
 
     fun isValid(range: IntRange): Boolean = value in range
 }
@@ -110,5 +114,60 @@ data class CountEntry(
             maxDigits = range.last.toString().length,
             isPristine = true,
         )
+    }
+}
+
+/**
+ * Weight entry in **half kilograms**: digits are whole kilos, and the ",5" key ([toggleHalf])
+ * adds or removes the half kilo. No other decimals can be typed: while the half is on, digits
+ * are ignored (as on a calculator after the only allowed decimal); backspace removes the half
+ * first, then the digits.
+ *
+ * [value] is in half kilograms: "12,5" -> 25. [decimalSeparator] follows the in-app language.
+ */
+@Immutable
+data class WeightEntry(
+    override val digits: String,
+    val half: Boolean,
+    val decimalSeparator: Char,
+    override val isPristine: Boolean = false,
+) : DigitEntry {
+
+    override val value: Int get() = (digits.toIntOrNull() ?: 0) * 2 + if (half) 1 else 0
+
+    override val display: String get() = digits.ifEmpty { "0" } + if (half) "${decimalSeparator}5" else ""
+
+    override fun type(digit: Int): WeightEntry {
+        require(digit in 0..9)
+        if (isPristine) return WeightEntry("", half = false, decimalSeparator).type(digit)
+        if (half || digits.length >= MAX_DIGITS) return this
+        val next = if (digits.isEmpty() && digit == 0) "" else digits + digit
+        return copy(digits = next)
+    }
+
+    override fun backspace(): WeightEntry =
+        if (half) copy(half = false, isPristine = false) else copy(digits = digits.dropLast(1), isPristine = false)
+
+    /** On the prefilled value it edits it (14 -> 14,5) instead of replacing it. */
+    override fun toggleHalf(): WeightEntry = copy(half = !half, isPristine = false)
+
+    companion object {
+        /** Whole kilos up to 999 (the ranges stop at 500 kg). */
+        const val MAX_DIGITS = 3
+
+        fun of(halfKg: Int, decimalSeparator: Char): WeightEntry {
+            val safe = halfKg.coerceIn(0, MAX_HALF_KG)
+            return WeightEntry(
+                digits = (safe / 2).toString().trimStart('0'),
+                half = safe % 2 == 1,
+                decimalSeparator = decimalSeparator,
+                isPristine = true,
+            )
+        }
+
+        private const val MAX_HALF_KG = 999 * 2 + 1
+
+        /** Text of a value without unit, for messages and presets. */
+        fun format(halfKg: Int, decimalSeparator: Char): String = formatWeight(halfKg, decimalSeparator)
     }
 }

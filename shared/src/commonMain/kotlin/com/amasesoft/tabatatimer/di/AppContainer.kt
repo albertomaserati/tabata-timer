@@ -1,8 +1,11 @@
 package com.amasesoft.tabatatimer.di
 
 import com.amasesoft.tabatatimer.data.AppSettings
+import com.amasesoft.tabatatimer.data.DataStoreGymRepository
 import com.amasesoft.tabatatimer.data.DataStoreSettingsRepository
 import com.amasesoft.tabatatimer.data.DataStoreWorkoutRepository
+import com.amasesoft.tabatatimer.data.GymRepository
+import com.amasesoft.tabatatimer.data.GymStore
 import com.amasesoft.tabatatimer.data.SettingsRepository
 import com.amasesoft.tabatatimer.data.WorkoutRepository
 import com.amasesoft.tabatatimer.data.WorkoutStore
@@ -31,6 +34,11 @@ class AppContainer(storageDirectory: String, val appVersion: AppVersion) {
 
     val settingsRepository: SettingsRepository = DataStoreSettingsRepository(
         createJsonDataStore(storageDirectory, "settings.json", AppSettings.serializer(), AppSettings()),
+    )
+
+    /** Gym routines ("schede"): a separate file, independent from the timer data. */
+    val gymRepository: GymRepository = DataStoreGymRepository(
+        createJsonDataStore(storageDirectory, "gym.json", GymStore.serializer(), GymStore()),
     )
 
     /** Application-lifetime scope (the container lives as long as the process). */
