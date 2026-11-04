@@ -11,6 +11,7 @@ import com.amasesoft.tabatatimer.domain.CyclePlan
 import com.amasesoft.tabatatimer.domain.WorkoutConfig
 import com.amasesoft.tabatatimer.domain.WorkoutConfig.Limits
 import com.amasesoft.tabatatimer.domain.WorkoutPlanner
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,14 +20,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import okio.IOException
 
 /**
  * - [Quick]: configure and start immediately; saving is optional (dialog asks name/description).
  * - [New]/[Edit]: name, description and configuration of a saved workout.
  */
+@Serializable
 enum class EditorMode { Quick, New, Edit }
 
 /** A cycle in the advanced editor; [key] is a stable identity for list animations. */

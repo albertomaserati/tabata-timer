@@ -25,6 +25,7 @@ import com.amasesoft.tabatatimer.ui.run.RunScreen
 import com.amasesoft.tabatatimer.ui.run.RunViewModel
 import com.amasesoft.tabatatimer.ui.settings.SettingsScreen
 import com.amasesoft.tabatatimer.ui.settings.SettingsViewModel
+import kotlin.reflect.typeOf
 import kotlinx.serialization.Serializable
 
 // Type-safe routes.
@@ -34,6 +35,9 @@ data object HomeRoute
 
 @Serializable
 data class EditorRoute(val mode: EditorMode, val workoutId: Long = NO_ID)
+
+/** Must be passed to `composable<EditorRoute>`: see [enumNavType]. */
+internal val EditorRouteTypeMap = mapOf(typeOf<EditorMode>() to enumNavType<EditorMode>())
 
 /** The configuration travels with the route, so quick (unsaved) workouts need no storage. */
 @Serializable
@@ -92,7 +96,7 @@ fun AppNavHost(
             )
         }
 
-        composable<EditorRoute> { entry ->
+        composable<EditorRoute>(typeMap = EditorRouteTypeMap) { entry ->
             val route = entry.toRoute<EditorRoute>()
             val viewModel = viewModel {
                 EditorViewModel(
