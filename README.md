@@ -1,7 +1,25 @@
 # Tabata Timer
 
-Interval (Tabata) timer for **Android** and **iOS**, built with Kotlin Multiplatform and Compose Multiplatform.
-The whole UI and logic are written once in the [`shared`](./shared/src) module; the platform apps are thin entry points.
+Interval (Tabata) timer for **Android** and **iOS**: set up a workout in seconds or save your favorites, then follow the
+countdown with a large display, the next activity, the total time left and audio cues. Built with Kotlin Multiplatform and
+Compose Multiplatform: the whole UI and logic are written once in the [`shared`](./shared/src) module, and the platform
+apps are thin entry points.
+
+| Home | Workout editor | Run screen |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/home.png" alt="Home with the quick workout card and the saved workouts" width="240"> | <img src="docs/screenshots/editor.png" alt="Workout editor in simple mode" width="240"> | <img src="docs/screenshots/run.png" alt="Run screen during a work phase with the progress ring" width="240"> |
+
+## Stack
+
+- **Language:** Kotlin 2.4
+- **UI:** Compose Multiplatform 1.11 with Material 3, plus type-safe `navigation-compose`
+- **Persistence:** DataStore with kotlinx.serialization (JSON files)
+- **Platforms:** Android 9+ (minSdk 28, targetSdk 36) and iOS 18.2+ (Apple Silicon simulators and devices)
+
+## Architecture
+
+Pure domain logic (workout planner, timeline, a clock based on a monotonic time source so the timer never drifts) sits apart from the UI and repositories, with manual dependency injection.
+The run screen uses MVI because a running workout is a state machine with a pure, testable reducer; home, editor and settings are forms and lists, so they use simpler MVVM.
 
 ## Features
 
@@ -15,10 +33,11 @@ The whole UI and logic are written once in the [`shared`](./shared/src) module; 
 - **Home list** sortable by custom order (reorder mode, move to top/bottom), name, most used, newest/oldest, shortest/longest.
   The chosen sort is remembered.
 - **Run screen**: progress ring with phase colors, remaining seconds of the current activity, its name, next activity,
-  total time remaining, set/cycle indicators, pause/resume, skip, stop. Audio and haptic cues (can be turned off),
-  screen kept on. The timer is drift-free and auto-pauses when the app goes to the background.
+  total time remaining, set/cycle indicators, pause/resume, skip, stop. Audio and haptic cues (can be turned off), an optional
+  warning 10 seconds before the end of an activity, screen kept on. The timer is drift-free and auto-pauses when the app goes to the background.
 - **Languages**: Italian and English, switchable inside the app (or following the system).
 - **Theme**: light, dark or system.
+- **About** section in the settings with the app version and a link to the developer website.
 - App icon (stopwatch with lightning bolt) and splash screen on both platforms.
 
 ## Requirements
@@ -69,4 +88,3 @@ Dependency versions are centralized in [`gradle/libs.versions.toml`](./gradle/li
 ## Known limitations
 
 - No background execution: the run pauses when the app leaves the foreground and must be resumed manually.
-- On iOS the status bar does not follow a theme forced inside the app.
