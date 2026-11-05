@@ -1,5 +1,6 @@
 package com.amasesoft.tabatatimer
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -9,6 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.amasesoft.tabatatimer.data.ThemeMode
@@ -37,11 +40,19 @@ fun App(container: AppContainer) {
 
     SystemBarsAppearance(darkTheme)
 
+    val focusManager = LocalFocusManager.current
+
     CompositionLocalProvider(LocalAppLocale provides current.language.tag) {
         // Compose resources cache the resolved locale: re-create the UI when it changes.
         key(current.language) {
             AppTheme(darkTheme = darkTheme) {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                // iOS has no back button to close the keyboard: tapping outside a field closes it.
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } },
+                    color = MaterialTheme.colorScheme.background,
+                ) {
                     AppNavHost(
                         navController = navController,
                         container = container,
